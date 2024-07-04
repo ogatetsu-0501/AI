@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>練習とリソース入力フォーム</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">練習とリソース入力フォーム</h1>
+            <form id="resourceForm">
+                <!-- 畑レベルカード -->
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">畑レベル</p>
+                    </header>
+                    <div class="card-content">
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <label class="label">ニンジン</label>
+                                <div class="select wide-select">
+                                    <select name="carrot_level" id="carrot_level">
+                                        <option value="1">Lv1</option>
+                                        <option value="2">Lv2</option>
+                                        <option value="3" selected>Lv3</option>
+                                        <option value="4">Lv4</option>
+                                        <option value="5">Lv5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <label class="label">ニンニク</label>
+                                <div class="select wide-select">
+                                    <select name="garlic_level" id="garlic_level">
+                                        <option value="1">Lv1</option>
+                                        <option value="2" selected>Lv2</option>
+                                        <option value="3">Lv3</option>
+                                        <option value="4">Lv4</option>
+                                        <option value="5">Lv5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <label class="label">ジャガイモ</label>
+                                <div class="select wide-select">
+                                    <select name="potato_level" id="potato_level">
+                                        <option value="1">Lv1</option>
+                                        <option value="2">Lv2</option>
+                                        <option value="3">Lv3</option>
+                                        <option value="4">Lv4</option>
+                                        <option value="5" selected>Lv5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <label class="label">トウガラシ</label>
+                                <div class="select wide-select">
+                                    <select name="chili_level" id="chili_level">
+                                        <option value="1">Lv1</option>
+                                        <option value="2">Lv2</option>
+                                        <option value="3" selected>Lv3</option>
+                                        <option value="4">Lv4</option>
+                                        <option value="5">Lv5</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="control">
+                                <label class="label">イチゴ</label>
+                                <div class="select wide-select">
+                                    <select name="strawberry_level" id="strawberry_level">
+                                        <option value="1">Lv1</option>
+                                        <option value="2">Lv2</option>
+                                        <option value="3">Lv3</option>
+                                        <option value="4">Lv4</option>
+                                        <option value="5" selected>Lv5</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- リソース個数カード -->
+                <div class="card mt-5">
+                    <header class="card-header">
+                        <p class="card-header-title">食材個数</p>
+                    </header>
+                    <div class="card-content">
+                        <div class="field is-grouped is-grouped-multiline">
+                            <div class="control">
+                                <label class="label">ニンジン</label>
+                                <input class="input wide-input" type="number" name="carrot_count" id="carrot_count" min="0" placeholder="ニンジンの個数を入力">
+                            </div>
+
+                            <div class="control">
+                                <label class="label">ニンニク</label>
+                                <input class="input wide-input" type="number" name="garlic_count" id="garlic_count" min="0" placeholder="ニンニクの個数を入力">
+                            </div>
+
+                            <div class="control">
+                                <label class="label">ジャガイモ</label>
+                                <input class="input wide-input" type="number" name="potato_count" id="potato_count" min="0" placeholder="ジャガイモの個数を入力">
+                            </div>
+
+                            <div class="control">
+                                <label class="label">トウガラシ</label>
+                                <input class="input wide-input" type="number" name="chili_count" id="chili_count" min="0" placeholder="トウガラシの個数を入力">
+                            </div>
+
+                            <div class="control">
+                                <label class="label">イチゴ</label>
+                                <input class="input wide-input" type="number" name="strawberry_count" id="strawberry_count" min="0" placeholder="イチゴの個数を入力">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 畑ポイントとシナリオリンク -->
+                <div class="field mt-5">
+                    <div class="field is-grouped is-grouped-multiline">
+                        <div class="control">
+                            <label class="label">畑ポイント</label>
+                            <input class="input wide-input" type="number" name="field_points" id="field_points" min="0" placeholder="畑ポイントを入力">
+                        </div>
+                        <div class="control">
+                            <label class="label">シナリオリンク</label>
+                            <div class="select wide-select">
+                                <select name="scenario_link" id="scenario_link">
+                                    <option value="0">0人</option>
+                                    <option value="1">1人</option>
+                                    <option value="2" selected>2人</option>
+                                    <option value="3">3人</option>
+                                    <option value="4">4人</option>
+                                    <option value="5">5人</option>
+                                    <option value="6">6人</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ボタン -->
+                <div class="field is-grouped mt-5">
+                    <div class="control">
+                        <button class="button is-primary" type="submit">送信</button>
+                    </div>
+                    <div class="control is-expanded has-text-right">
+                        <button class="button is-light" type="button" onclick="resetForm()">リセット</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.wide-input,
+.wide-select select,
+.wide-select .select {
+    width: 200px;
+}
+.has-text-right {
+    text-align: right;
+}
