@@ -66,6 +66,10 @@ document
           garlicCounts: result.garlicCounts,
           levelIncrement: levelIncrement,
           fieldPoints: [],
+          carrotLevels: Array(14).fill(initialLevels.carrot),
+          potatoLevels: Array(14).fill(initialLevels.potato),
+          chiliLevels: Array(14).fill(initialLevels.chili),
+          strawberryLevels: Array(14).fill(initialLevels.strawberry),
         });
         if (currentLevelIncrease === 1) {
           break;
@@ -145,6 +149,10 @@ document
               garlicCounts: result.garlicCounts,
               levelIncrement: lastResult[resultIndex].levelIncrement,
               fieldPoints: lastResult[resultIndex].fieldPoints,
+              carrotLevels: lastResult[resultIndex].carrotLevels,
+              potatoLevels: lastResult[resultIndex].potatoLevels,
+              chiliLevels: lastResult[resultIndex].chiliLevels,
+              strawberryLevels: lastResult[resultIndex].strawberryLevels,
             };
           } else {
             // result.garlicCountsにマイナスの値がある場合はループから抜ける
@@ -184,29 +192,21 @@ document
 
       // 畑レベルの変化によるポイントの減算
       for (let i = 0; i < result.garlicLevels.length - 1; i++) {
-        // ニンニクのレベルを順番にチェック（最後の1つ前まで）
         if (result.garlicLevels[i] !== result.garlicLevels[i + 1]) {
-          // 隣り合うレベルが違うか確認
-          let levelDiff = result.garlicLevels[i + 1] - result.garlicLevels[i]; // レベルの差を計算
-          let levelKey = `${result.garlicLevels[i]}→${
-            result.garlicLevels[i + 1]
-          }`; // レベルの変化を表すキーを作成
-          let pointsToDeduct = 0; // 減算するポイントを初期化
+          let levelDiff = result.garlicLevels[i + 1] - result.garlicLevels[i];
+          let pointsToDeduct = 0;
 
           if (levelDiff > 0) {
-            // レベルが上がっているか確認
             for (
               let level = result.garlicLevels[i];
               level < result.garlicLevels[i + 1];
               level++
             ) {
-              // レベルが上がる度にチェック
-              let nextLevelKey = `${level}→${level + 1}`; // 次のレベルへのキーを作成
-              pointsToDeduct += levelUpPoints[nextLevelKey]; // 上がったレベルに応じたポイントを合計
+              let nextLevelKey = `${level}→${level + 1}`;
+              pointsToDeduct += levelUpPoints[nextLevelKey];
             }
             for (let j = i + 1; j < points.length; j++) {
-              // 現在のポイントリストの残りを更新
-              points[j] -= pointsToDeduct; // 合計ポイントを減算
+              points[j] -= pointsToDeduct;
             }
           }
         }
