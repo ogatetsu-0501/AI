@@ -18,9 +18,9 @@ function getInitialLevels() {
   };
 }
 
-function getInitialGarlicCount() {
-  // ニンニクの初期数を取得して数値に変換する。値がない場合は0にする
-  return parseInt(document.getElementById("garlic_count").value, 10) || 0;
+function getInitialFoodCount(food) {
+  // 食品の初期数を取得して数値に変換する。値がない場合は0にする
+  return parseInt(document.getElementById(food + "_count").value, 10) || 0;
 }
 
 function getFieldPoints() {
@@ -53,7 +53,7 @@ document
     let turnCount = 0;
     let currentLevelIncrease = 1;
     let levelIncrement = 1;
-    let result = await processTurns(baseLevels, turnCount);
+    let result = await processTurns(baseLevels, turnCount, "garlic");
     let lastResult = [];
 
     while (true) {
@@ -77,13 +77,13 @@ document
           currentLevelIncrease = 1; // nを1に戻す
           levelIncrement += 1; // mを増やす
           console.log(`レベルを ${levelIncrement} 上げます`);
-          // level + mが6以上になるか確認する
-          if (baseLevels.some((level) => level + levelIncrement >= 6)) {
-            console.log("レベル + m が 6 以上になりました。処理を終了します。");
+          // level + mが5以上になるか確認する
+          if (baseLevels.some((level) => level + levelIncrement >= 5)) {
+            console.log("レベル + m が 5 以上になりました。処理を終了します。");
             break;
           }
           // 初期値を確認するために初期値に更新する
-          result = await processTurns(baseLevels, turnCount);
+          result = await processTurns(baseLevels, turnCount, "garlic");
           const negativeIndex = result.garlicCounts.findIndex(
             (count) => count < 0
           );
@@ -94,7 +94,7 @@ document
           );
 
           // 再度 processTurns を実行する
-          result = await processTurns(newBaseLevels, turnCount);
+          result = await processTurns(newBaseLevels, turnCount, "garlic");
           currentLevelIncrease += 1;
         }
       } else {
@@ -112,9 +112,9 @@ document
           console.log(`レベルを ${levelIncrement} 上げます`);
         }
 
-        // level + mが6以上になるか確認する
-        if (baseLevels.some((level) => level + levelIncrement >= 6)) {
-          console.log("レベル + m が 6 以上になりました。処理を終了します。");
+        // level + mが5以上になるか確認する
+        if (baseLevels.some((level) => level + levelIncrement >= 5)) {
+          console.log("レベル + m が 5 以上になりました。処理を終了します。");
           break;
         }
 
@@ -124,7 +124,7 @@ document
         );
 
         // 再度 processTurns を実行する
-        result = await processTurns(newBaseLevels, turnCount);
+        result = await processTurns(newBaseLevels, turnCount, "garlic");
         currentLevelIncrease += 1;
       }
     }
@@ -140,28 +140,66 @@ document
         let indexDifference = levels[levelIndex] - levels[levelIndex + 1];
         if (indexDifference !== 0) {
           levels[levelIndex + 1] -= 1;
-          result = await processTurns(levels, turnCount);
+          garlicresult = await processTurns(levels, turnCount, "garlic");
+
+          carrotresult = await processTurns(
+            lastResult[resultIndex].carrotLevels,
+            turnCount,
+            "carrot"
+          );
+          potatoresult = await processTurns(
+            lastResult[resultIndex].potatoLevels,
+            turnCount,
+            "potato"
+          );
+          chiliresult = await processTurns(
+            lastResult[resultIndex].chiliLevels,
+            turnCount,
+            "chili"
+          );
+          strawberryresult = await processTurns(
+            lastResult[resultIndex].strawberryLevels,
+            turnCount,
+            "strawberry"
+          );
           // result.garlicCountsに一つも負の値がなければ
-          if (!result.garlicCounts.some((count) => count < 0)) {
+          if (!garlicresult.garlicCounts.some((count) => count < 0)) {
             // lastResult[resultIndex]に値を上書きする
             lastResult[resultIndex] = {
-              garlicLevels: result.garlicLevels,
-              garlicCounts: result.garlicCounts,
-              levelIncrement: lastResult[resultIndex].levelIncrement,
+              garlicLevels: garlicresult.garlicLevels,
+              garlicCounts: garlicresult.garlicCounts,
               fieldPoints: lastResult[resultIndex].fieldPoints,
               carrotLevels: lastResult[resultIndex].carrotLevels,
+              carrotCounts: carrotresult.garlicCounts,
               potatoLevels: lastResult[resultIndex].potatoLevels,
+              potatoCounts: potatoresult.garlicCounts,
               chiliLevels: lastResult[resultIndex].chiliLevels,
+              chiliCounts: chiliresult.garlicCounts,
               strawberryLevels: lastResult[resultIndex].strawberryLevels,
+              strawberryCounts: strawberryresult.garlicCounts,
             };
           } else {
             // result.garlicCountsにマイナスの値がある場合はループから抜ける
+            lastResult[resultIndex] = {
+              garlicLevels: lastResult[resultIndex].garlicLevels,
+              garlicCounts: lastResult[resultIndex].garlicCounts,
+              fieldPoints: lastResult[resultIndex].fieldPoints,
+              carrotLevels: lastResult[resultIndex].carrotLevels,
+              carrotCounts: carrotresult.garlicCounts,
+              potatoLevels: lastResult[resultIndex].potatoLevels,
+              potatoCounts: potatoresult.garlicCounts,
+              chiliLevels: lastResult[resultIndex].chiliLevels,
+              chiliCounts: chiliresult.garlicCounts,
+              strawberryLevels: lastResult[resultIndex].strawberryLevels,
+              strawberryCounts: strawberryresult.garlicCounts,
+            };
             break;
           }
         }
       }
 
-      console.log(`Updated levels for result ${resultIndex}:`, levels);
+      console.log(`Updated levels for result `, lastResult);
+
       resultIndex++;
     }
 
@@ -214,14 +252,84 @@ document
     });
 
     console.log("Final results with field points:", lastResult);
+
+    // 作物の初期レベルが4のものを抽出する
+    const cropsWithLevelFour = Object.entries(initialLevels)
+      .filter(([crop, level]) => level === 4)
+      .map(([crop]) => crop);
+
+    console.log("初期レベルが4の作物:", cropsWithLevelFour);
+    // 各 resultIndex をループして処理する
+    lastResult.forEach(async (result, resultIndex) => {
+      console.log(
+        `resultIndex ${resultIndex} の fieldPoints:`,
+        result.fieldPoints
+      );
+
+      // レベル4の作物が1つ存在する場合
+      if (cropsWithLevelFour.length === 1) {
+        const firstIndexOver250 = result.fieldPoints.findIndex(
+          (point) => point > 250
+        );
+        if (firstIndexOver250 !== -1) {
+          console.log(
+            `resultIndex ${resultIndex} の 250を最初に超えたインデックス:`,
+            firstIndexOver250
+          );
+
+          // 作物のレベルを上げる
+          const crop = cropsWithLevelFour[0];
+          result[`${crop}Levels`][firstIndexOver250] += 1;
+
+          // インデックス以下のfieldPointsを250引く
+          for (let i = 0; i <= firstIndexOver250; i++) {
+            result.fieldPoints[i] -= 250;
+          }
+
+          // 更新したレベルで processTurns を実行
+          const updatedResult = await processTurns(
+            result[`${crop}Levels`],
+            turnCount,
+            crop
+          );
+
+          // 結果をlastResultの特定の配列に上書き
+          result[`${crop}Levels`] = updatedResult.garlicLevels;
+          result[`${crop}Counts`] = updatedResult.garlicCounts;
+          console.log(`Updated result for ${crop}:`, updatedResult);
+        }
+      }
+
+      // レベル4の作物が2つ存在する場合
+      if (cropsWithLevelFour.length === 2) {
+        const firstIndexOver250 = result.fieldPoints.findIndex(
+          (point) => point > 250
+        );
+        const firstIndexOver500 = result.fieldPoints.findIndex(
+          (point) => point > 500
+        );
+        if (firstIndexOver250 !== -1) {
+          console.log(
+            `resultIndex ${resultIndex} の 250を最初に超えたインデックス:`,
+            firstIndexOver250
+          );
+        }
+        if (firstIndexOver500 !== -1) {
+          console.log(
+            `resultIndex ${resultIndex} の 500を最初に超えたインデックス:`,
+            firstIndexOver500
+          );
+        }
+      }
+    });
   });
 
-async function processTurns(baseLevels, turnCount) {
+async function processTurns(baseLevels, turnCount, food) {
   console.log(turnCount);
   // 畑のデータを取得する
   const farmData = await fetchFarmData();
   // ニンニクの初期数を取得する
-  const initialGarlicCount = getInitialGarlicCount();
+  const initialGarlicCount = getInitialFoodCount(food);
   // 畑の初期ポイントを取得する
   const initialFieldPoints = getFieldPoints();
   // 各ターンのニンニクのレベルを保存するリストを作成する
