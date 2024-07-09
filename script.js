@@ -268,21 +268,27 @@ document
 
       // レベル4の作物が1つ存在する場合
       if (cropsWithLevelFour.length === 1) {
-        const firstIndexOver250 = result.fieldPoints.findIndex(
-          (point) => point > 250
-        );
-        if (firstIndexOver250 !== -1) {
+        // インデックスの大きい方から数えて、最初に250未満になったインデックス+1を探す
+        const lastIndexUnder250 = result.fieldPoints
+          .slice()
+          .reverse()
+          .findIndex((point) => point < 250);
+        const adjustedIndex = result.fieldPoints.length - lastIndexUnder250;
+
+        if (lastIndexUnder250 !== -1) {
           console.log(
-            `resultIndex ${resultIndex} の 250を最初に超えたインデックス:`,
-            firstIndexOver250
+            `resultIndex ${resultIndex} の 250未満になったインデックス+1:`,
+            adjustedIndex
           );
 
           // 作物のレベルを上げる
           const crop = cropsWithLevelFour[0];
-          result[`${crop}Levels`][firstIndexOver250] += 1;
+          for (let i = adjustedIndex; i < result.fieldPoints.length; i++) {
+            result[`${crop}Levels`][i] += 1;
+          }
 
-          // インデックス以下のfieldPointsを250引く
-          for (let i = 0; i <= firstIndexOver250; i++) {
+          // インデックス以上のfieldPointsを250引く
+          for (let i = adjustedIndex; i < result.fieldPoints.length; i++) {
             result.fieldPoints[i] -= 250;
           }
 
@@ -296,7 +302,7 @@ document
           // 結果をlastResultの特定の配列に上書き
           result[`${crop}Levels`] = updatedResult.garlicLevels;
           result[`${crop}Counts`] = updatedResult.garlicCounts;
-          console.log(`Updated result for ${crop}:`, updatedResult);
+          console.log(`Updated result for ${crop}:`, lastResult);
         }
       }
 
